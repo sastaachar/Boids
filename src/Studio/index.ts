@@ -82,7 +82,7 @@ export class Studio {
     this.renderer.render(this.scene, this.camera);
 
     this._FPS += 1;
-    console.log(this._FPS / elapsedTime);
+    // /console.log(this._FPS / elapsedTime);
   };
 }
 
