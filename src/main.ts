@@ -38,22 +38,6 @@ const main = (args?: ["string"]) => {
   gui.add(boids, "alignmentCoef", -1, 1, 0.0001);
   gui.add(boids, "cohesionCoef", -1, 1, 0.0001);
 
-  // adding cone
-  // const mesh = new THREE.Mesh(
-  //   new THREE.ConeBufferGeometry(),
-  //   new THREE.MeshBasicMaterial({ color: "blue", wireframe: true })
-  // );
-  //mesh.position.set(1, 0.5, 0);
-
-  // adding a point
-  // const pointMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-  // const pointPoisition = new THREE.Vector3(2, 3, 0);
-  // const point = drawPoint(
-  //   boids._elements[0].velocity,
-  //   pointMaterial,
-  //   studio.scene
-  // );
-
   console.timeEnd("Setup");
 
   const Render = () => {
