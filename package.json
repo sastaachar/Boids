@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --config ./bundler/webpack.prod.js",
     "dev": "webpack serve --config ./bundler/webpack.dev.js",
-    "publish": "git checkout gh-pages && npm run build && git add ./docs && git commit -m 'pushing latest build' && git push"
+    "publish": "git checkout gh-pages && git merge main -m 'merging main into gh-pages' && npm run build && git add ./docs && git commit -m 'pushing latest build' && git push && git checkout main"
   },
   "keywords": [],
   "author": "",
