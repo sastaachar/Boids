@@ -34,9 +34,13 @@ const main = (args?: ["string"]) => {
   const boids = new Boids(studio.scene);
   boids.addElements(1000);
 
-  gui.add(boids, "separationCoef", -10, 10, 0.0001);
-  gui.add(boids, "alignmentCoef", -10, 10, 0.0001);
-  gui.add(boids, "cohesionCoef", -10, 10, 0.0001);
+  gui.add(boids, "separationCoef", -10, 10, 0.0001).name("Separation Coef");
+  gui.add(boids, "alignmentCoef", -10, 10, 0.0001).name("Alignment Coef");
+  gui.add(boids, "cohesionCoef", -10, 10, 0.0001).name("Cohesion Coef");
+  gui.add(boids, "radiusOfVision", -10, 10, 0.0001).name("Radius Of Vision");
+  gui
+    .add(boids, "handleBoundMethod", ["teleport", "bounce"])
+    .name("If out of bound");
 
   console.timeEnd("Setup");
 

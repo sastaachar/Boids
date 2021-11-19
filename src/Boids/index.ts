@@ -12,6 +12,7 @@ class Boid {
   zone: number;
   material: THREE.MeshBasicMaterial;
   radiusOfVison: number;
+  handleBoundMethod: string;
 
   separation: boolean = true;
   alignment: boolean = true;
@@ -22,7 +23,7 @@ class Boid {
   alignmentCoef: number = 1;
   cohesionCoef: number = 0.01;
 
-  constructor(geometry: THREE.BufferGeometry, radiusOfVision = 1) {
+  constructor(geometry: THREE.BufferGeometry, radiusOfVision = 3) {
     this.velocity = getRandomVector3().multiplyScalar(0.001);
     this.direction = this.velocity.normalize();
     this.radiusOfVison = radiusOfVision;
@@ -56,7 +57,7 @@ class Boid {
     this._updateMaterialColor();
   };
 
-  handleBoidInteraction = (boids: Array<Boid>, curIndex: number): void => {
+  _handleBoidInteraction = (boids: Array<Boid>, curIndex: number): void => {
     const newVelocity = this.velocity.clone();
     const centerOfNeignbours = this.mesh.position.clone();
     let totalNeighbours = 0;
@@ -66,11 +67,9 @@ class Boid {
     for (let i = 0; i < boids.length; i++) {
       if (i == curIndex) continue;
 
-      const difX = boids[i].mesh.position.x - this.mesh.position.x;
-      const difY = boids[i].mesh.position.y - this.mesh.position.y;
-      const difZ = boids[i].mesh.position.z - this.mesh.position.z;
-
-      const sqDist = difX * difX + difY * difY + difZ * difZ;
+      const sqDist = this.mesh.position.distanceToSquared(
+        boids[i].mesh.position
+      );
 
       if (sqDist <= sqRadiusOfVison) {
         if (this.separation) {
@@ -118,8 +117,9 @@ class Boid {
     }
   };
 
-  handleBoidMovement = (_deltaTime: number) => {
+  _handleBoidMovement = (_deltaTime: number) => {
     // distance = speed * time
+
     const deltaDistance = this.velocity.clone().multiplyScalar(_deltaTime);
 
     if (
@@ -127,7 +127,12 @@ class Boid {
       Math.abs(this.mesh.position.y + deltaDistance.y) >= 10 ||
       Math.abs(this.mesh.position.z + deltaDistance.z) >= 10
     ) {
-      this.mesh.position.multiplyScalar(-1);
+      if (this.handleBoundMethod === "teleport")
+        this.mesh.position.multiplyScalar(-1);
+      else if (this.handleBoundMethod === "bounce") {
+        this.velocity.multiplyScalar(-1);
+        this._udpateDirection();
+      }
       return;
     }
 
@@ -135,8 +140,8 @@ class Boid {
   };
 
   Render = (_deltaTime: number, boids: Array<Boid>, curIndex: number) => {
-    this.handleBoidInteraction(boids, curIndex);
-    this.handleBoidMovement(_deltaTime);
+    this._handleBoidInteraction(boids, curIndex);
+    this._handleBoidMovement(_deltaTime);
   };
 }
 
@@ -151,7 +156,9 @@ export class Boids {
   _deltaTime: number;
   _elapsedTime: number;
   _boudingBoxMaterial: THREE.MeshStandardMaterial;
+  handleBoundMethod: string = "teleport";
 
+  radiusOfVision: number = 1;
   separationCoef: number = 0.07;
   alignmentCoef: number = 0.5;
   cohesionCoef: number = 0.1;
@@ -193,7 +200,7 @@ export class Boids {
 
   addElements = (count: number) => {
     for (let i = 0; i < count; i++) {
-      const boid = new Boid(this._commonGeometry);
+      const boid = new Boid(this._commonGeometry, this.radiusOfVision);
 
       this.scene.add(boid.mesh);
       this.elements.push(boid);
@@ -208,6 +215,8 @@ export class Boids {
       this.elements[i].separationCoef = this.separationCoef;
       this.elements[i].alignmentCoef = this.alignmentCoef;
       this.elements[i].cohesionCoef = this.cohesionCoef;
+      this.elements[i].radiusOfVison = this.radiusOfVision;
+      this.elements[i].handleBoundMethod = this.handleBoundMethod;
 
       this.elements[i].Render(this._deltaTime, this.elements, i);
     }
