@@ -5,7 +5,8 @@
   "main": "src/script.ts",
   "scripts": {
     "build": "webpack --config ./bundler/webpack.prod.js",
-    "dev": "webpack serve --config ./bundler/webpack.dev.js"
+    "dev": "webpack serve --config ./bundler/webpack.dev.js",
+    "publish": "git checkout gh-pages && npm run build && git add ./docs && git commit -m 'pushing latest build' && git push"
   },
   "keywords": [],
   "author": "",
