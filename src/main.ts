@@ -34,9 +34,9 @@ const main = (args?: ["string"]) => {
   const boids = new Boids(studio.scene);
   boids.addElements(1000);
 
-  gui.add(boids, "separationCoef", -1, 1, 0.0001);
-  gui.add(boids, "alignmentCoef", -1, 1, 0.0001);
-  gui.add(boids, "cohesionCoef", -1, 1, 0.0001);
+  gui.add(boids, "separationCoef", -10, 10, 0.0001);
+  gui.add(boids, "alignmentCoef", -10, 10, 0.0001);
+  gui.add(boids, "cohesionCoef", -10, 10, 0.0001);
 
   console.timeEnd("Setup");
 

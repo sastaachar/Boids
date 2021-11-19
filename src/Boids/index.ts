@@ -97,25 +97,13 @@ class Boid {
         if (this.cohesion) {
           centerOfNeignbours.add(boids[i].mesh.position);
         }
-
-        // sumX += (boids[i].velocity.x * sqDist) / 100;
-        // sumY += (boids[i].velocity.y * sqDist) / 100;
-        // sumZ += (boids[i].velocity.z * sqDist) / 100;
         ++totalNeighbours;
       }
-
-      // if (sqDist < 0.2) {
-      //   isCrash = true;
-      // }
     }
-    // if (isCrash) {
-    //   this.material.color = new THREE.Color("red");
-    // } else {
-    //   this.material.color = new THREE.Color("white");
-    // }
 
     if (totalNeighbours > 0) {
       if (this.cohesion) {
+        // go towards the centerofmass (take avg)
         centerOfNeignbours
           .multiplyScalar(1 / (totalNeighbours + 1))
           .sub(this.mesh.position)
@@ -124,18 +112,14 @@ class Boid {
         newVelocity.add(centerOfNeignbours);
       }
 
-      this.velocity.set(newVelocity.x, newVelocity.y, newVelocity.z);
+      this.velocity.copy(newVelocity);
 
-      // this.velocity.set(
-      //   12 / totalNeighbours,
-      //   12 / totalNeighbours,
-      //   12 / totalNeighbours
-      // );
       this._udpateDirection();
     }
   };
 
   handleBoidMovement = (_deltaTime: number) => {
+    // distance = speed * time
     const deltaDistance = this.velocity.clone().multiplyScalar(_deltaTime);
 
     if (
@@ -153,8 +137,6 @@ class Boid {
   Render = (_deltaTime: number, boids: Array<Boid>, curIndex: number) => {
     this.handleBoidInteraction(boids, curIndex);
     this.handleBoidMovement(_deltaTime);
-
-    // distance = speed * time
   };
 }
 
@@ -190,16 +172,6 @@ export class Boids {
     const waterColorMap = textureLoader.load(
       "Textures/Water/Water_002_COLOR.jpg"
     );
-    // const waterDispMap = textureLoader.load(
-    //   "Textures/Water/Water_002_DISP.png"
-    // );
-    // const waterNormalMap = textureLoader.load(
-    //   "Textures/Water/Water_002_NORM.jpg"
-    // );
-    // const waterOccMap = textureLoader.load("Textures/Water/Water_002_OCC.jpg");
-    // const waterRoughMap = textureLoader.load(
-    //   "Textures/Water/Water_002_ROUGH.jpg"
-    // );
 
     const dustAplhaMap = textureLoader.load("Textures/dust-texture.jpg");
 
