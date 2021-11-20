@@ -72,7 +72,8 @@ class Boid {
       );
 
       if (sqDist <= sqRadiusOfVison) {
-        if (this.separation) {
+        // avoidance radius is half of vision
+        if (this.separation && sqDist <= sqRadiusOfVison / 4) {
           // push away
           //a = (aPos  - bPos)*(separationCoef)
           const separationForce = this.mesh.position

@@ -29,7 +29,7 @@ const main = (args?: ["string"]) => {
 
   const gui = new Dat.GUI();
   axesHelper.visible = false;
-  gui.add(axesHelper, "visible");
+  gui.add(axesHelper, "visible").name("Axis");
 
   const boids = new Boids(studio.scene);
   boids.addElements(1000);
